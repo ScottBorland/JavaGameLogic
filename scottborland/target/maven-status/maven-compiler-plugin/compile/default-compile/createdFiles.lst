@@ -1,2 +1,6 @@
+test\GameObject.class
 test\Game.class
 test\Window.class
+test\ID.class
+test\Player.class
+test\Handler.class
