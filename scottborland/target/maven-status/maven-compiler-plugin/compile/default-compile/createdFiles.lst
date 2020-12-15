@@ -2,6 +2,7 @@ test\GameObject.class
 test\KeyInput.class
 test\HUD.class
 test\Game.class
+test\Trail.class
 test\Window.class
 test\BasicEnemy.class
 test\ID.class
