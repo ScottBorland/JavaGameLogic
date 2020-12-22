@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.util.Random;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 
 public class Game extends Canvas implements Runnable {
     public static final int WIDTH = 1200, HEIGHT = WIDTH / 12 * 9;
@@ -12,16 +14,24 @@ public class Game extends Canvas implements Runnable {
     private boolean running = false;
     private Random r;
     private Handler handler;
+    private BufferedImage level = null;
+
+    Camera cam;
 
     public Game() {
+        cam = new Camera(0, 0);
         handler = new Handler();
         this.addKeyListener(new KeyInput(handler));
 
+        BufferedImageLoader loader = new BufferedImageLoader();
+        level = loader.loadImage("/tile.jpg");//loading the level
+        
         new Window(WIDTH, HEIGHT, "Bunny Hopping", this);
         
         r = new Random();
 
         handler.addObject(new Player(WIDTH/2 -32, HEIGHT/2 -32, ID.Player, handler));
+        handler.addObject(new Tile(WIDTH/2 -32, HEIGHT/2 -32, ID.Tile, handler));
     }
 
     private static final long serialVersionUID = 1L;
@@ -72,6 +82,11 @@ public class Game extends Canvas implements Runnable {
 
     private void tick() {
         handler.tick();
+        for(int i = 0; i < handler.object.size(); i++){
+            if(handler.object.get(i).getId() == ID.Player){
+                cam.tick(handler.object.get(i));
+            }
+        }     
     }
 
     private void render() {
@@ -82,11 +97,16 @@ public class Game extends Canvas implements Runnable {
         }
 
         Graphics g = bs.getDrawGraphics();
+        Graphics2D g2d = (Graphics2D) g;
 
         g.setColor(Color.black);
         g.fillRect(0, 0, WIDTH, HEIGHT);
 
+        g2d.translate(cam.getX(), cam.getY());//begin of cam
+
         handler.render(g);
+
+        g2d.translate(-cam.getX(), -cam.getY());//end of cam
 
         g.dispose();
         bs.show();

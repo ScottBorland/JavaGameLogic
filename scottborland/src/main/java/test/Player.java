@@ -24,7 +24,6 @@ public class Player extends GameObject{
         y += velY;
         x = Game.clamp(x, 0, Game.WIDTH-37);
         y = Game.clamp(y, 0, Game.HEIGHT-67);
-
         // collision();
     }
 
@@ -36,10 +35,7 @@ public class Player extends GameObject{
 
     public void render(Graphics g){
         g.setColor(Color.white);
-        g.fillRect(x, y, 32, 32);
+        g.fillRoundRect(x, y, 32, 32, 20, 20);
     }
-
-
-
 }
 
