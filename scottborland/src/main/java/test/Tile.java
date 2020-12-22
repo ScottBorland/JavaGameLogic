@@ -8,10 +8,11 @@ public class Tile extends GameObject{
     Handler handler;
     public Tile(int x, int y, ID id, Handler handler){
         super(x, y, id);
+        this.handler = handler;
     }
 
     public void tick(){
-        // System.out.println("tick");
+
     }
     
     public void render(Graphics g){

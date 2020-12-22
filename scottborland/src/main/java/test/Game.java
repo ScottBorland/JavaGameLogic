@@ -9,7 +9,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 public class Game extends Canvas implements Runnable {
-    public static final int WIDTH = 1200, HEIGHT = WIDTH / 12 * 9;
+    public static final int WIDTH = 1920, HEIGHT = 1080;
     private Thread thread;
     private boolean running = false;
     private Random r;
@@ -22,16 +22,17 @@ public class Game extends Canvas implements Runnable {
         cam = new Camera(0, 0);
         handler = new Handler();
         this.addKeyListener(new KeyInput(handler));
-
-        BufferedImageLoader loader = new BufferedImageLoader();
-        level = loader.loadImage("/tile.jpg");//loading the level
         
         new Window(WIDTH, HEIGHT, "Bunny Hopping", this);
         
         r = new Random();
+        BufferedImageLoader loader = new BufferedImageLoader();
+        level = loader.loadImage("/level2.png");//loading the level
 
-        handler.addObject(new Player(WIDTH/2 -32, HEIGHT/2 -32, ID.Player, handler));
-        handler.addObject(new Tile(WIDTH/2 -32, HEIGHT/2 -32, ID.Tile, handler));
+        LoadImageLevel(level);
+
+        //handler.addObject(new Player(WIDTH/2 -32, HEIGHT/2 -32, ID.Player, handler));
+        // handler.addObject(new Tile(WIDTH/2 -32, HEIGHT/2 -32, ID.Tile, handler));
     }
 
     private static final long serialVersionUID = 1L;
@@ -121,6 +122,26 @@ public class Game extends Canvas implements Runnable {
         }
         else{
             return var;
+        }
+    }
+
+    private void LoadImageLevel(BufferedImage image){
+        int w = image.getWidth();
+        int h = image.getHeight();
+        
+        for(int xx = 0; xx < h; xx++){
+            for(int yy = 0; yy < w; yy++){
+                int pixel = image.getRGB(xx, yy);
+                int red = (pixel >> 16) & 0xff;
+                int green = (pixel >> 8) & 0xff;
+                int blue = (pixel) & 0xff;
+
+                if(red == 255 && green == 255 && blue == 255){
+                    handler.addObject(new Tile(xx*32, yy*32, ID.Tile, handler));
+                }else if(red == 0 && green == 0 && blue == 255){
+                    handler.addObject(new Player(xx*32, yy*32, ID.Player, handler));
+                }
+            }
         }
     }
     public static void main( String[] args )

@@ -2,9 +2,9 @@ test\GameObject.class
 test\KeyInput.class
 test\Camera.class
 test\BufferedImageLoader.class
-test\Game.class
-test\Tile.class
 test\Window.class
-test\ID.class
 test\Player.class
 test\Handler.class
+test\Game.class
+test\Tile.class
+test\ID.class
