@@ -16,6 +16,7 @@ public class Game extends Canvas implements Runnable {
     private Random r;
     private Handler handler;
     private BufferedImage level = null;
+    public static double angle; 
 
     private Point point;
 
@@ -35,7 +36,7 @@ public class Game extends Canvas implements Runnable {
         level = loader.loadImage("/level2.png");//loading the level
 
         LoadImageLevel(level);
-
+        angle = 0;
         //handler.addObject(new Player(WIDTH/2 -32, HEIGHT/2 -32, ID.Player, handler));
         // handler.addObject(new Tile(WIDTH/2 -32, HEIGHT/2 -32, ID.Tile, handler));
     }
@@ -109,8 +110,9 @@ public class Game extends Canvas implements Runnable {
         g.fillRect(0, 0, WIDTH, HEIGHT);
 
         g2d.translate(cam.getX(), cam.getY());//begin of cam
-        double angle = (double) 10;
-        
+        Point p = getMousePos();
+        //calculateRotationAngle(p, player.getX(), player.getY());
+    
         g2d.rotate(Math.toRadians(angle), -cam.getX()+WIDTH/2, -cam.getY()+HEIGHT/2);
 
         handler.render(g);
@@ -137,6 +139,10 @@ public class Game extends Canvas implements Runnable {
         Point point = MouseInput.getPoint();
         return point;
     }
+
+    // public static double calculateRotationAngle(Point p, int x, int y){
+
+    // }
 
     private void LoadImageLevel(BufferedImage image){
         int w = image.getWidth();
