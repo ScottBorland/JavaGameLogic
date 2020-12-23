@@ -7,4 +7,5 @@ test\Player.class
 test\Handler.class
 test\Game.class
 test\Tile.class
+test\MouseInput.class
 test\ID.class

@@ -3,6 +3,7 @@ package test;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.Point;
 
 public class Tile extends GameObject{
     Handler handler;
@@ -12,7 +13,8 @@ public class Tile extends GameObject{
     }
 
     public void tick(){
-
+        Point mousePos = Game.getMousePos();
+        //System.out.println(mousePos);
     }
     
     public void render(Graphics g){

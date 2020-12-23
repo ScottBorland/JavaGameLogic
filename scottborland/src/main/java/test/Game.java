@@ -7,6 +7,7 @@ import java.awt.image.BufferStrategy;
 import java.util.Random;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.awt.Point;
 
 public class Game extends Canvas implements Runnable {
     public static final int WIDTH = 1920, HEIGHT = 1080;
@@ -16,12 +17,16 @@ public class Game extends Canvas implements Runnable {
     private Handler handler;
     private BufferedImage level = null;
 
+    private Point point;
+
     Camera cam;
 
     public Game() {
         cam = new Camera(0, 0);
         handler = new Handler();
         this.addKeyListener(new KeyInput(handler));
+        this.addMouseListener(new MouseInput());
+        this.addMouseMotionListener(new MouseInput());
         
         new Window(WIDTH, HEIGHT, "Bunny Hopping", this);
         
@@ -123,6 +128,11 @@ public class Game extends Canvas implements Runnable {
         else{
             return var;
         }
+    }
+
+    public static Point getMousePos(){
+        Point point = MouseInput.getPoint();
+        return point;
     }
 
     private void LoadImageLevel(BufferedImage image){
