@@ -109,9 +109,12 @@ public class Game extends Canvas implements Runnable {
         g.fillRect(0, 0, WIDTH, HEIGHT);
 
         g2d.translate(cam.getX(), cam.getY());//begin of cam
+        double angle = (double) 10;
+        
+        g2d.rotate(Math.toRadians(angle), -cam.getX()+WIDTH/2, -cam.getY()+HEIGHT/2);
 
         handler.render(g);
-
+        
         g2d.translate(-cam.getX(), -cam.getY());//end of cam
 
         g.dispose();
