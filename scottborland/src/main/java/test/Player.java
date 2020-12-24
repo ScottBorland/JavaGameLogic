@@ -22,12 +22,31 @@ public class Player extends GameObject{
     }
 
     public void tick(){
+        // x += velX;
+        // y += velY;
+        Game.angle = rotatePlayer();
+        
+        movementToRelative();
+        velX *= 10;
+        velY *= 10;
         x += velX;
         y += velY;
-        Game.angle = rotatePlayer();
-        // x = Game.clamp(x, 0, Game.WIDTH-37);
-        // y = Game.clamp(y, 0, Game.HEIGHT-67);
+        velX = 0;
+        velY = 0;
         // collision();
+    }
+
+    public void movementToRelative(){
+        double mag = Math.sqrt(Math.pow(velX,2) + Math.pow(velY,2));
+        
+        if(mag > 0){
+           double heading = (Math.atan2(velY, velX));
+           //System.out.println(heading);
+           double sumAngle = heading + Math.toRadians(Game.angle);
+        //    System.out.println(sumAngle);
+           velX = Math.cos(sumAngle);
+           velY = Math.sin(sumAngle);
+        }
     }
 
     public double rotatePlayer(){
@@ -35,10 +54,6 @@ public class Player extends GameObject{
         double x2 = p.x - (-x + Game.WIDTH/2);
         double y2 = p.y - (-y + Game.HEIGHT/2);
         double rotationAngle = (double) -1 * (Math.toDegrees(Math.atan2(y2 - y, x2 - x)) + 90);
-        // if(rotationAngle < 0){
-        //     rotationAngle += 360;
-        // }
-        System.out.println(rotationAngle);
         return rotationAngle;
     }
 
@@ -52,7 +67,15 @@ public class Player extends GameObject{
         Graphics2D g2d = (Graphics2D) g;
         g2d.rotate(Math.toRadians(-Game.angle), x, y);
         g.setColor(Color.white);
-        g.fillRoundRect(x, y, 32, 32, 20, 20);
+        //g.fillRoundRect(x, y, 32, 32, 20, 20);
+        Point p = Game.getMousePos();
+        int x2 = p.x - (-x + Game.WIDTH/2);
+        int y2 = p.y - (-y + Game.HEIGHT/2);
+        g.drawLine(x, y, x2, y2);
+        int x3 = (int) (velX * 100) + x;
+        int y3 = (int) (velY * 100) + y;
+        g.drawLine(x, y, x3, y3);
+        g.drawOval(x, y, 30, 30);
         g2d.rotate(Math.toRadians(Game.angle), x, y);
     }
 }
