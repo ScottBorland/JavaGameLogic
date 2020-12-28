@@ -24,11 +24,9 @@ public class Player extends GameObject{
     }
 
     public void tick(){
-        // x += velX;
-        // y += velY;
         Game.angle = rotatePlayer();
         
-        //movementToRelative();
+        movementToRelative();
         x += velX;
         y += velY;
         // velX = 0;
@@ -37,24 +35,31 @@ public class Player extends GameObject{
     }
 
     public void movementToRelative(){
-        double mag = Math.sqrt(Math.pow(velX,2) + Math.pow(velY,2));
-        //System.out.println((int) mag);
-        // if(mag > 0){
+        Vector2D velocity = new Vector2D(velX, velY);
+        double mag = velocity.norm();
+        if(mag > 0){
+            double heading = velocity.angle(); 
         //    double heading = (Math.atan2(velY, velX));
         //    //System.out.println(heading);
-        //    double sumAngle = heading + Math.toRadians(Game.angle);
+            double sumAngle = heading + Math.toRadians(-Game.angle);
+            //System.out.println(Game.angle);
+            Vector2D wishdir = Vector2D.createPolar(0, sumAngle);
+            //wishdir.normalize();
+            //System.out.println(wishdir);
         //     //System.out.println(sumAngle);
         //    velX = Math.cos(sumAngle);
         //    velY = Math.sin(sumAngle);
-        // }
+        }
     }
 
     public double rotatePlayer(){
         Point2D p = Game.getMousePos();
+        //p2 is the mouse position relative to the player
+        Point2D p2 = new Point2D(p.x()+ x - (Game.WIDTH/2), p.y() + y - (Game.HEIGHT/2));
         Point2D playerPos = new Point2D(x, y);
-        Vector2D playerVector = new Vector2D(p, playerPos);
-        double rotationAngle = playerVector.angle();
-        //System.out.println(rotationAngle);
+        Vector2D playerVector = new Vector2D(p2, playerPos);
+        double rotationAngle = -Math.toDegrees(playerVector.angle() - 1.570796);
+        //System.out.println("rotation angle" + rotationAngle);
         return rotationAngle;
     }
 
@@ -75,9 +80,9 @@ public class Player extends GameObject{
         int x2 = (int) p.x() - (-x + Game.WIDTH/2);
         int y2 = (int) p.y() - (-y + Game.HEIGHT/2);
         g.drawLine(x, y, x2, y2);
-        int x3 = (int) (velX * 100) + x;
-        int y3 = (int) (velY * 100) + y;
-        g.drawLine(x, y, x3, y3);
+        // int x3 = (int) (velX * 100) + x;
+        // int y3 = (int) (velY * 100) + y;
+        // g.drawLine(x, y, x3, y3);
         //g.drawOval(x, y, 30, 30);
         g2d.rotate(Math.toRadians(Game.angle), x, y);
     }

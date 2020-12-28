@@ -6,8 +6,6 @@ import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.util.Random;
 
-// import com.seisw.util.geom.Point2D;
-
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.Point;
@@ -24,7 +22,7 @@ public class Game extends Canvas implements Runnable {
     private BufferedImage level = null;
     public static double angle; 
 
-    public static Point2D point;
+    public static Point2D point2d;
 
     Camera cam;
 
@@ -143,13 +141,9 @@ public class Game extends Canvas implements Runnable {
     }
 
     public static Point2D getMousePos(){
-        Point2D point = MouseInput.getPoint();
-        return point;
+        Point2D point2d = MouseInput.getPoint();
+        return point2d;
     }
-
-    // public static double calculateRotationAngle(Point p, int x, int y){
-
-    // }
 
     private void LoadImageLevel(BufferedImage image){
         int w = image.getWidth();
