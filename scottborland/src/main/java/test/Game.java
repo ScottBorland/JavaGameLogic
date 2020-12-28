@@ -5,9 +5,15 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.util.Random;
+
+// import com.seisw.util.geom.Point2D;
+
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.Point;
+
+import math.geom2d.Point2D;
+import math.geom2d.Vector2D;
 
 public class Game extends Canvas implements Runnable {
     public static final int WIDTH = 1920, HEIGHT = 1080;
@@ -18,7 +24,7 @@ public class Game extends Canvas implements Runnable {
     private BufferedImage level = null;
     public static double angle; 
 
-    private Point point;
+    public Point2D point;
 
     Camera cam;
 
@@ -110,7 +116,7 @@ public class Game extends Canvas implements Runnable {
         g.fillRect(0, 0, WIDTH, HEIGHT);
 
         g2d.translate(cam.getX(), cam.getY());//begin of cam
-        Point p = getMousePos();
+        Point2D p = getMousePos();
         //calculateRotationAngle(p, player.getX(), player.getY());
     
         g2d.rotate(Math.toRadians(angle), -cam.getX()+WIDTH/2, -cam.getY()+HEIGHT/2);
@@ -135,8 +141,8 @@ public class Game extends Canvas implements Runnable {
         }
     }
 
-    public static Point getMousePos(){
-        Point point = MouseInput.getPoint();
+    public static Point2D getMousePos(){
+        Point2D point = MouseInput.getPoint();
         return point;
     }
 

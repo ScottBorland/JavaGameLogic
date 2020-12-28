@@ -5,9 +5,12 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import math.geom2d.Point2D;
+
 public class MouseInput implements MouseListener, MouseMotionListener {
 
     public static Point point;
+    public static Point2D point2d;
 
     @Override
     public void mouseDragged(MouseEvent e) {
@@ -48,7 +51,8 @@ public class MouseInput implements MouseListener, MouseMotionListener {
         // TODO Auto-generated method stub
 
     }
-    public static Point getPoint() {
-        return point;
+    public static Point2D getPoint() {
+        Point2D point2d = new Point2D(point.x, point.y); 
+        return point2d;
     }  
 }

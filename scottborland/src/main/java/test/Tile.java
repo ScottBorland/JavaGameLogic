@@ -5,6 +5,8 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.Point;
 
+import math.geom2d.Point2D;
+
 public class Tile extends GameObject{
     Handler handler;
     public Tile(int x, int y, ID id, Handler handler){
@@ -13,7 +15,7 @@ public class Tile extends GameObject{
     }
 
     public void tick(){
-        Point mousePos = Game.getMousePos();
+        Point2D mousePos = Game.getMousePos();
         //System.out.println(mousePos);
     }
     
