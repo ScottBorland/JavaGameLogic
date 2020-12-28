@@ -5,7 +5,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.Random;
-import java.awt.Point;
 
 import math.geom2d.Point2D;
 import math.geom2d.Vector2D;
@@ -49,14 +48,6 @@ public class Player extends GameObject{
         //    velY = Math.sin(sumAngle);
         // }
     }
-
-    // public double rotatePlayer(){
-    //     Point p = Game.getMousePos();
-    //     double x2 = p.x - (-x + Game.WIDTH/2);
-    //     double y2 = p.y - (-y + Game.HEIGHT/2);
-    //     double rotationAngle = (double) -1 * (Math.toDegrees(Math.atan2(y2 - y, x2 - x)) + 90);
-    //     return rotationAngle;
-    // }
 
     public double rotatePlayer(){
         Point2D p = Game.getMousePos();
