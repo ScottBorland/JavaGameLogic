@@ -6,6 +6,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import math.geom2d.Point2D;
+import math.geom2d.Vector2D;
 
 public class MouseInput implements MouseListener, MouseMotionListener {
 

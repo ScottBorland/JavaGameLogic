@@ -16,7 +16,6 @@ public class Tile extends GameObject{
 
     public void tick(){
         Point2D mousePos = Game.getMousePos();
-        //System.out.println(mousePos);
     }
     
     public void render(Graphics g){

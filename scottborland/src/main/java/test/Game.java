@@ -24,7 +24,7 @@ public class Game extends Canvas implements Runnable {
     private BufferedImage level = null;
     public static double angle; 
 
-    public Point2D point;
+    public static Point2D point;
 
     Camera cam;
 
@@ -36,6 +36,7 @@ public class Game extends Canvas implements Runnable {
         this.addMouseMotionListener(new MouseInput());
         
         new Window(WIDTH, HEIGHT, "Bunny Hopping", this);
+        Point2D point = new Point2D(0, 0);
         
         r = new Random();
         BufferedImageLoader loader = new BufferedImageLoader();
@@ -116,7 +117,7 @@ public class Game extends Canvas implements Runnable {
         g.fillRect(0, 0, WIDTH, HEIGHT);
 
         g2d.translate(cam.getX(), cam.getY());//begin of cam
-        Point2D p = getMousePos();
+        //Point2D p = getMousePos();
         //calculateRotationAngle(p, player.getX(), player.getY());
     
         g2d.rotate(Math.toRadians(angle), -cam.getX()+WIDTH/2, -cam.getY()+HEIGHT/2);
