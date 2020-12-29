@@ -128,7 +128,7 @@ public class Game extends Canvas implements Runnable {
         bs.show();
     }
 
-    public static int clamp(int var, int min,  int max){
+    public static double clamp(double var, double min,  double max){
         if(var >= max){
             return var = max;
         }
@@ -138,6 +138,16 @@ public class Game extends Canvas implements Runnable {
         else{
             return var;
         }
+    }
+
+    //Game.map(p.x(), -0.5*Game.WIDTH, 0.5*Game.WIDTH, -360, 360);
+    public static double map(double var, double lowerBound, double upperBound, double lowerBound2, double upperBound2){
+        double newVal = (var - lowerBound) / (upperBound - lowerBound) * (upperBound2 - lowerBound2) + lowerBound2;
+        if (lowerBound2 < upperBound2) {
+            return clamp(newVal, lowerBound2, upperBound2);
+          } else {
+            return clamp(newVal, upperBound2, lowerBound2);
+          }
     }
 
     public static Point2D getMousePos(){
