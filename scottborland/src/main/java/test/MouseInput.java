@@ -53,6 +53,7 @@ public class MouseInput implements MouseListener, MouseMotionListener {
 
     }
     public static Point2D getPoint() {
+        //point = e.getPoint();
         Point2D point2d = new Point2D(point.x, point.y); 
         return point2d;
     }  

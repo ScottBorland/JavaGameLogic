@@ -14,9 +14,27 @@ public class Player extends GameObject{
     Random r = new Random();
     Handler handler;
 
+    protected int verticalInput, horizontalInput;
+
     public Player(int x, int y, ID id, Handler handler) {
         super(x, y, id);
         this.handler = handler;
+        this.verticalInput = 0;
+        this.horizontalInput = 0;
+    }
+
+    public int getVerticalInput() {
+        return verticalInput;
+    }
+
+    public int getHorizontalInput() {
+        return horizontalInput;
+    }
+    public void setVerticalInput(int vInput) {
+        this.verticalInput = vInput;
+    }
+    public void setHorizontalInput(int hInput) {
+        this.horizontalInput = hInput;
     }
 
     public Rectangle getBounds(){
@@ -26,29 +44,30 @@ public class Player extends GameObject{
     public void tick(){
         Game.angle = rotatePlayer();
         
-        //movementToRelative();
-        x += velX;
-        y += velY;
+        movementToRelative();
     }
 
     public void movementToRelative(){
-        Vector2D velocity = new Vector2D(velX, velY);
+        Vector2D velocity = new Vector2D(KeyInput.horizontalInput, KeyInput.verticalInput);
         double mag = velocity.norm();
         if(mag > 0){
             double heading = velocity.angle(); 
-    
             double sumAngle = heading + Math.toRadians(-Game.angle);
             System.out.println(Game.angle);
-            Vector2D wishdir = Vector2D.createPolar(0, sumAngle);
+            Vector2D wishdir = Vector2D.createPolar(1, sumAngle);
+            //System.out.println(wishdir);
+            x += (10*wishdir.x());
+            y += (10*wishdir.y());
         }
     }
 
     public double rotatePlayer(){
         Point2D p = Game.getMousePos();
-        double angle = -Game.map(p.x(), 0, Game.WIDTH, -180, 180);
+        double angle = -Game.map(p.x(), 0, Game.WIDTH, -360, 360);
         return angle;
     }
 
+    //This function is defunct and has been replaced by the one above
     public double rotatePlayer2(){
         Point2D p = Game.getMousePos();
         //p2 is the mouse position relative to the player
@@ -67,8 +86,8 @@ public class Player extends GameObject{
         g.fillRoundRect(x, y, 32, 32, 20, 20);
         g2d.translate(16, 16);
         Point2D p = Game.getMousePos();
-        int x2 = (int) p.x() - (-x + Game.WIDTH/2);
-        int y2 = (int) p.y() - (-y + Game.HEIGHT/2);
+        //int x2 = (int) p.x() - (-x + Game.WIDTH/2);
+        //int y2 = (int) p.y() - (-y + Game.HEIGHT/2);
         //g.drawLine(x, y, x2, y2);
         g2d.rotate(Math.toRadians(Game.angle), x, y);
     }
