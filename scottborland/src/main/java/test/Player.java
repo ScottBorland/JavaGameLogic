@@ -13,54 +13,46 @@ public class Player extends GameObject{
 
     Random r = new Random();
     Handler handler;
+    Vector2D position;
+    Vector2D velocity;
+    Vector2D acceleration;
+    Boolean grounded;
 
     protected int verticalInput, horizontalInput;
 
     public Player(int x, int y, ID id, Handler handler) {
         super(x, y, id);
         this.handler = handler;
-        this.verticalInput = 0;
-        this.horizontalInput = 0;
+        this.position = new Vector2D(0, 0);
+        this.velocity = new Vector2D(0, 0);
+        this.acceleration = new Vector2D(0, 0);
+        this.grounded = true;
     }
 
-    public int getVerticalInput() {
-        return verticalInput;
-    }
-
-    public int getHorizontalInput() {
-        return horizontalInput;
-    }
-    public void setVerticalInput(int vInput) {
-        this.verticalInput = vInput;
-    }
-    public void setHorizontalInput(int hInput) {
-        this.horizontalInput = hInput;
-    }
-
-    public Rectangle getBounds(){
-        return new Rectangle(x, y, 32, 32);
+    public void update(){
+        x += velocity.x();
+        y += velocity.y();
+        position = position.plus(velocity);
+        // x = (int) position.x();
+        // y = (int) position.y();
     }
 
     public void tick(){
         Game.angle = rotatePlayer();
-        
-        movementToRelative();
+        update();
+        groundMove();
     }
 
-    public void movementToRelative(){
+    public void groundMove(){
         Vector2D velocity = new Vector2D(KeyInput.horizontalInput, KeyInput.verticalInput);
         double mag = velocity.norm();
         if(mag > 0){
             double heading = velocity.angle(); 
             double sumAngle = heading + Math.toRadians(-Game.angle);
-            System.out.println(Game.angle);
             Vector2D wishdir = Vector2D.createPolar(1, sumAngle);
-            //System.out.println(wishdir);
-            x += (10*wishdir.x());
-            y += (10*wishdir.y());
+            //position = new Vector2D(10*wishdir.x(), 10*wishdir.y());
         }
     }
-
     public double rotatePlayer(){
         Point2D p = Game.getMousePos();
         double angle = -Game.map(p.x(), 0, Game.WIDTH, -360, 360);
@@ -83,12 +75,9 @@ public class Player extends GameObject{
         g2d.rotate(Math.toRadians(-Game.angle), x, y);
         g.setColor(Color.white);
         g2d.translate(-16, -16);
-        g.fillRoundRect(x, y, 32, 32, 20, 20);
+        g.fillRect(x, y, 32, 32);
         g2d.translate(16, 16);
         Point2D p = Game.getMousePos();
-        //int x2 = (int) p.x() - (-x + Game.WIDTH/2);
-        //int y2 = (int) p.y() - (-y + Game.HEIGHT/2);
-        //g.drawLine(x, y, x2, y2);
         g2d.rotate(Math.toRadians(Game.angle), x, y);
     }
 }
