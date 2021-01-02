@@ -19,8 +19,12 @@ public class Player extends GameObject{
     Vector2D acceleration;
     Boolean grounded;
 
-    public double moveSpeed = 3;
-    public double runAcceleration = 4;
+    double moveSpeed = 10;
+    double runAcceleration = 40;
+    double runDeacceleration = 10;
+    public double friction = 0.8;
+    public double gravity = 10;
+
 
     protected int verticalInput, horizontalInput;
 
@@ -53,7 +57,7 @@ public class Player extends GameObject{
             double sumAngle = heading + Math.toRadians(-Game.angle);
             Vector2D wishdir = Vector2D.createPolar(1, sumAngle);
             accelerate(wishdir, moveSpeed, runAcceleration);
-            //position = new Vector2D(10*wishdir.x(), 10*wishdir.y());
+            applyFriction(1);
         }
     }
 
@@ -71,7 +75,37 @@ public class Player extends GameObject{
             accelspeed = addspeed;
         Vector2D addVel = new Vector2D (accelspeed * wishdir.x(), accelspeed * wishdir.y());
         velocity = velocity.plus(addVel);
-        //System.out.println(velocity);
+    }
+
+    public void applyFriction(double t){
+        double speed;
+        double newSpeed;
+        double control;
+        double drop;
+
+        Vector2D vec = velocity.clone();
+
+        //vec.z = 0;
+        speed = vec.norm();
+
+        if(speed < runDeacceleration){
+            control = runDeacceleration;
+        }else{
+            control = speed;
+        }
+
+        drop = control * friction *  t;
+        
+        newSpeed = speed - drop;
+        //playerFriction = newSpeed;
+        if(newSpeed < 0){
+            newSpeed = 0;
+        }
+        if(speed > 0){
+            newSpeed /= speed;
+        }
+
+        velocity = velocity.times(newSpeed);
     }
 
     public double rotatePlayer(){
