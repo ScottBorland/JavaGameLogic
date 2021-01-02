@@ -113,7 +113,8 @@ public class Game extends Canvas implements Runnable {
         Graphics g = bs.getDrawGraphics();
         Graphics2D g2d = (Graphics2D) g;
 
-        g.setColor(Color.black);
+        Color backgroundColor = new Color(255, 102, 255);
+        g.setColor(Color.gray);
         g.fillRect(0, 0, WIDTH, HEIGHT);
 
         g2d.translate(cam.getX(), cam.getY());//begin of cam
@@ -173,9 +174,9 @@ public class Game extends Canvas implements Runnable {
                 int blue = (pixel) & 0xff;
 
                 if(red == 255 && green == 255 && blue == 255){
-                    handler.addObject(new Tile(xx*32, yy*32, ID.Tile, handler));
+                    handler.addObject(new Tile(xx*64, yy*64, ID.Tile, handler));
                 }else if(red == 0 && green == 0 && blue == 255){
-                    handler.addObject(new Player(xx*32, yy*32, ID.Player, handler));
+                    handler.addObject(new Player(xx*64, yy*64, ID.Player, handler));
                 }
             }
         }

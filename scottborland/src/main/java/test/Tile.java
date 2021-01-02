@@ -10,6 +10,7 @@ import math.geom2d.Point2D;
 public class Tile extends GameObject{
     Handler handler;
     Texture tex = Game.getInstance();
+    int size = 64;
     public Tile(int x, int y, ID id, Handler handler){
         super(x, y, id);
         this.handler = handler;
@@ -20,10 +21,12 @@ public class Tile extends GameObject{
     }
     
     public void render(Graphics g){
-        g.setColor(Color.white);
-        g.drawRect((int)x, (int)y, 32, 32);
+        //g.setColor(new Color(102, 0, 51));
+        g.setColor(Color.black);
+        g.drawRect((int)x, (int)y, 64, 64);
+        //g.fillRect(x, y, 64, 64);
     }
     public Rectangle getBounds(){
-        return new Rectangle((int)x, (int)y, 32, 32);
+        return new Rectangle((int)x, (int)y, 64, 64);
     }
 }

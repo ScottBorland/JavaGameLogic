@@ -10,7 +10,7 @@ public class Texture {
     public Texture(){
         BufferedImageLoader loader = new BufferedImageLoader();
         try{
-            playerImage = loader.loadImage("/player.png");
+            playerImage = loader.loadImage("/player2.png");
         }catch(Exception e){
             e.printStackTrace();
         }

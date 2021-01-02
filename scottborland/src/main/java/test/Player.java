@@ -21,12 +21,13 @@ public class Player extends GameObject{
 
     Texture tex = Game.getInstance();
 
-    double moveSpeed = 10;
+    double moveSpeed = 20;
     double runAcceleration = 40;
     double runDeacceleration = 10;
-    public double friction = 0.8;
+    public double friction = 0.2;
     public double gravity = 10;
 
+    int size = 96;
 
     protected int verticalInput, horizontalInput;
 
@@ -40,8 +41,8 @@ public class Player extends GameObject{
     }
 
     public void update(){
-        x += (10 * velocity.x());
-        y += (10 * velocity.y());
+        x += velocity.x();
+        y += velocity.y();
         velocity = new Vector2D(0, 0);
     }
 
@@ -131,10 +132,10 @@ public class Player extends GameObject{
         Graphics2D g2d = (Graphics2D) g;
         g2d.rotate(Math.toRadians(-Game.angle), x, y);
         g.setColor(Color.white);
-        g2d.translate(-32, -32);
+        g2d.translate(-size/2, -size/2);
         //g.fillRect(x, y, 32, 32);
-        g.drawImage(tex.images[0], x, y, 64, 64, null);
-        g2d.translate(32, 32);
+        g.drawImage(tex.images[0], x, y, size, size, null);
+        g2d.translate(size/2, size/2);
         Point2D p = Game.getMousePos();
         g2d.rotate(Math.toRadians(Game.angle), x, y);
     }
