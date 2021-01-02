@@ -1,6 +1,7 @@
 test\GameObject.class
 test\KeyInput.class
 test\Camera.class
+test\Texture.class
 test\BufferedImageLoader.class
 test\Window.class
 test\Player.class

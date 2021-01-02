@@ -19,6 +19,8 @@ public class Player extends GameObject{
     Vector2D acceleration;
     Boolean grounded;
 
+    Texture tex = Game.getInstance();
+
     double moveSpeed = 10;
     double runAcceleration = 40;
     double runDeacceleration = 10;
@@ -129,9 +131,10 @@ public class Player extends GameObject{
         Graphics2D g2d = (Graphics2D) g;
         g2d.rotate(Math.toRadians(-Game.angle), x, y);
         g.setColor(Color.white);
-        g2d.translate(-16, -16);
-        g.fillRect(x, y, 32, 32);
-        g2d.translate(16, 16);
+        g2d.translate(-32, -32);
+        //g.fillRect(x, y, 32, 32);
+        g.drawImage(tex.images[0], x, y, 64, 64, null);
+        g2d.translate(32, 32);
         Point2D p = Game.getMousePos();
         g2d.rotate(Math.toRadians(Game.angle), x, y);
     }

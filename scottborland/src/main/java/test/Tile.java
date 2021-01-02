@@ -9,6 +9,7 @@ import math.geom2d.Point2D;
 
 public class Tile extends GameObject{
     Handler handler;
+    Texture tex = Game.getInstance();
     public Tile(int x, int y, ID id, Handler handler){
         super(x, y, id);
         this.handler = handler;

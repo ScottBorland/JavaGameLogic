@@ -25,6 +25,7 @@ public class Game extends Canvas implements Runnable {
     public static Point2D point2d;
 
     Camera cam;
+    static Texture tex;
 
     public Game() {
         cam = new Camera(0, 0);
@@ -34,7 +35,8 @@ public class Game extends Canvas implements Runnable {
         this.addMouseMotionListener(new MouseInput());
         
         new Window(WIDTH, HEIGHT, "Bunny Hopping", this);
-        Point2D point = new Point2D(0, 0);
+
+        tex = new Texture();
         
         r = new Random();
         BufferedImageLoader loader = new BufferedImageLoader();
@@ -126,6 +128,10 @@ public class Game extends Canvas implements Runnable {
 
         g.dispose();
         bs.show();
+    }
+
+    public static Texture getInstance(){
+        return tex;
     }
 
     public static double clamp(double var, double min,  double max){
