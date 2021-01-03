@@ -18,14 +18,24 @@ public class Player extends GameObject{
     Vector2D velocity;
     Vector2D acceleration;
     Boolean grounded;
+    
+    double velZ;
+    double z;
 
     Texture tex = Game.getInstance();
 
     double moveSpeed = 20;
+    double jumpSpeed = 50;
     double runAcceleration = 40;
     double runDeacceleration = 10;
-    public double friction = 0.2;
+    public double friction = 0.6;
     public double gravity = 10;
+
+    double airAcceleration = 2;          // Air accel   
+    double airDecceleration = 2;         // Deacceleration experienced when opposite strafing
+    double airControl = 0.3;               // How precise air control is
+    double sideStrafeAcceleration = 50;  // How fast acceleration occurs to get up to sideStrafeSpeed when
+    double sideStrafeSpeed = 1.0; 
 
     int size = 96;
 
@@ -37,31 +47,82 @@ public class Player extends GameObject{
         this.position = new Vector2D(0, 0);
         this.velocity = new Vector2D(0, 0);
         this.acceleration = new Vector2D(0, 0);
+        this.z = 0;
+        this.velZ = 0;
         this.grounded = true;
     }
 
     public void update(){
+        size = (int) calcSize(z, 96);
+        System.out.println(z);
         x += velocity.x();
         y += velocity.y();
-        velocity = new Vector2D(0, 0);
+        z += velZ;
+        if(z <= 0){
+            grounded = true;
+            z = 0;
+            groundMove();
+        }else{
+            grounded = false;
+            airMove();
+        }
     }
 
     public void tick(){
         Game.angle = rotatePlayer();
-        groundMove();
         update();
     }
 
     public void groundMove(){
-        Vector2D input = new Vector2D(KeyInput.horizontalInput, KeyInput.verticalInput);
-        double mag = input.norm();
+        Vector2D wishdir = new Vector2D(KeyInput.horizontalInput, KeyInput.verticalInput);
+        double mag = wishdir.norm();
         if(mag > 0){
-            double heading = input.angle(); 
+            double heading = wishdir.angle(); 
             double sumAngle = heading + Math.toRadians(-Game.angle);
-            Vector2D wishdir = Vector2D.createPolar(1, sumAngle);
+            wishdir = Vector2D.createPolar(1, sumAngle);
+            }
+            
             accelerate(wishdir, moveSpeed, runAcceleration);
-            applyFriction(1);
+           
+            if(!KeyInput.wishJump){
+                applyFriction(1);
+            }else{
+                applyFriction(0);
+            }
+            velZ = 0;
+            if(KeyInput.wishJump){
+                velZ = jumpSpeed;
+                KeyInput.wishJump = false;
+            }
+    }
+
+    public void airMove(){
+        double wishVel = airAcceleration;
+        double accel = 12;
+        Vector2D wishdir = new Vector2D(horizontalInput, verticalInput);
+        if(wishdir.norm() != 0){
+            double heading = wishdir.angle(); 
+            double sumAngle = heading + Math.toRadians(-Game.angle);
+            wishdir = Vector2D.createPolar(1, sumAngle);
         }
+        double wishSpeed = wishdir.norm();
+        wishSpeed *= moveSpeed;
+
+        wishdir.normalize();
+
+        double wishSpeed2 = wishSpeed;
+
+        accelerate(wishdir, wishSpeed, accel);
+        // if(airControl > 0)
+        //     this.AirControl(wishdir, wishSpeed2);
+        // !CPM: Aircontrol
+
+        // Apply gravity
+        velZ -= gravity;
+    }
+
+    double calcSize(double height, double size){
+        return (size + (height * 0.2));
     }
 
     public void accelerate(Vector2D wishdir, double wishSpeed, double accel){
@@ -88,7 +149,7 @@ public class Player extends GameObject{
 
         Vector2D vec = velocity.clone();
 
-        //vec.z = 0;
+        velZ = 0;
         speed = vec.norm();
 
         if(speed < runDeacceleration){
@@ -113,7 +174,7 @@ public class Player extends GameObject{
 
     public double rotatePlayer(){
         Point2D p = Game.getMousePos();
-        double angle = -Game.map(p.x(), 0, Game.WIDTH, -360, 360);
+        double angle = -Game.map(p.x(), 0, Game.WIDTH, -500, 500);
         return angle;
     }
 

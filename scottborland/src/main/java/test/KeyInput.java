@@ -8,6 +8,7 @@ public class KeyInput extends KeyAdapter{
     private Handler handler;
     public static double verticalInput = 0;
     public static double horizontalInput = 0;
+    public static Boolean wishJump = false;
 
     public KeyInput(Handler handler){
         this.handler = handler;
@@ -19,7 +20,9 @@ public class KeyInput extends KeyAdapter{
         if(key == KeyEvent.VK_W)verticalInput = -1;
         if(key == KeyEvent.VK_S)verticalInput = 1;
         if(key == KeyEvent.VK_D)horizontalInput = 1;
-        if(key == KeyEvent.VK_A)horizontalInput = -1;   
+        if(key == KeyEvent.VK_A)horizontalInput = -1;  
+        
+        if(key == KeyEvent.VK_SPACE)wishJump = true;
 
         if(key == KeyEvent.VK_ESCAPE)System.exit(1);
     }
@@ -31,5 +34,7 @@ public class KeyInput extends KeyAdapter{
         if(key == KeyEvent.VK_S)verticalInput = 0;
         if(key == KeyEvent.VK_D)horizontalInput = 0;
         if(key == KeyEvent.VK_A)horizontalInput = 0;
+        
+        if(key == KeyEvent.VK_SPACE)wishJump = false;
     }
 }
