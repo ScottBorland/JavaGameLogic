@@ -24,16 +24,16 @@ public class Player extends GameObject{
 
     Texture tex = Game.getInstance();
 
-    double moveSpeed = 20;
-    double jumpSpeed = 50;
-    double runAcceleration = 40;
+    double moveSpeed = 7;
+    double jumpSpeed = 8;
+    double runAcceleration = 14;
     double runDeacceleration = 10;
-    public double friction = 0.6;
-    public double gravity = 10;
+    public double friction = 6;
+    public double gravity = 2;
 
     double airAcceleration = 2;          // Air accel   
     double airDecceleration = 2;         // Deacceleration experienced when opposite strafing
-    double airControl = 0.3;               // How precise air control is
+    double airControlVar = 0.3;               // How precise air control is
     double sideStrafeAcceleration = 50;  // How fast acceleration occurs to get up to sideStrafeSpeed when
     double sideStrafeSpeed = 1.0; 
 
@@ -54,7 +54,6 @@ public class Player extends GameObject{
 
     public void update(){
         size = (int) calcSize(z, 96);
-        System.out.println(z);
         x += velocity.x();
         y += velocity.y();
         z += velZ;
@@ -81,24 +80,23 @@ public class Player extends GameObject{
             double sumAngle = heading + Math.toRadians(-Game.angle);
             wishdir = Vector2D.createPolar(1, sumAngle);
             }
-            
-            accelerate(wishdir, moveSpeed, runAcceleration);
            
             if(!KeyInput.wishJump){
                 applyFriction(1);
             }else{
                 applyFriction(0);
             }
-            velZ = 0;
+            accelerate(wishdir, moveSpeed, runAcceleration);
+            velZ = -gravity;
             if(KeyInput.wishJump){
                 velZ = jumpSpeed;
-                KeyInput.wishJump = false;
+                //KeyInput.wishJump = false;
             }
     }
 
     public void airMove(){
         double wishVel = airAcceleration;
-        double accel = 12;
+        double accel;
         Vector2D wishdir = new Vector2D(horizontalInput, verticalInput);
         if(wishdir.norm() != 0){
             double heading = wishdir.angle(); 
@@ -111,18 +109,65 @@ public class Player extends GameObject{
         wishdir.normalize();
 
         double wishSpeed2 = wishSpeed;
+        if (velocity.dot(wishdir) < 0)
+            accel = airDecceleration;
+        else
+            accel = airAcceleration;
+        // If the player is ONLY strafing left or right
+        if(KeyInput.verticalInput == 0 && KeyInput.horizontalInput != 0)
+        {
+            if(wishSpeed > sideStrafeSpeed)
+                wishSpeed = sideStrafeSpeed;
+            accel = sideStrafeAcceleration;
+        }
 
         accelerate(wishdir, wishSpeed, accel);
-        // if(airControl > 0)
-        //     this.AirControl(wishdir, wishSpeed2);
+        if(airControlVar > 0){
+            airControl(wishdir, wishSpeed2);
+        }
         // !CPM: Aircontrol
 
         // Apply gravity
         velZ -= gravity;
     }
 
+    public void airControl(Vector2D wishdir, double wishSpeed){
+        double yspeed;
+        double speed;
+        double dot;
+        double k;
+        // Can't control movement if not moving forward or backward
+        if((Math.abs(KeyInput.verticalInput) < 0.001) || (Math.abs(wishSpeed) < 0.001)){
+            return;
+        }
+        yspeed = velZ;
+        velZ = 0;
+        
+        speed = velocity.norm();
+        velocity = velocity.normalize();
+
+        dot = velocity.dot(wishdir);
+        k = 32;
+        k *= airControlVar * dot * dot;
+
+        // Change direction while slowing down
+        if (dot > 0)
+        {
+            Vector2D newVel = new Vector2D(velocity.x() * speed + wishdir.x() * k, velocity.y() * speed + wishdir.y() * k);
+            velocity = newVel;
+            
+            velZ = velZ * speed;
+
+            velocity.normalize();
+            //double moveDirectionNorm = this.velocity;
+        }
+
+        velocity.times(speed);
+        velZ = yspeed; // Note this line 
+    }
+
     double calcSize(double height, double size){
-        return (size + (height * 0.2));
+        return (size + (height * 2));
     }
 
     public void accelerate(Vector2D wishdir, double wishSpeed, double accel){
@@ -145,20 +190,19 @@ public class Player extends GameObject{
         double speed;
         double newSpeed;
         double control;
-        double drop;
+        double drop = 0;
 
         Vector2D vec = velocity.clone();
-
-        velZ = 0;
+        
         speed = vec.norm();
-
-        if(speed < runDeacceleration){
+        if(grounded){
+            if(speed < runDeacceleration){
             control = runDeacceleration;
-        }else{
+            }else{
             control = speed;
+         }
+         drop = control * friction *  t;
         }
-
-        drop = control * friction *  t;
         
         newSpeed = speed - drop;
         //playerFriction = newSpeed;
@@ -174,7 +218,7 @@ public class Player extends GameObject{
 
     public double rotatePlayer(){
         Point2D p = Game.getMousePos();
-        double angle = -Game.map(p.x(), 0, Game.WIDTH, -500, 500);
+        double angle = -Game.map(p.x(), 0, Game.WIDTH, -180, 180);
         return angle;
     }
 
